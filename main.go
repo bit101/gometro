@@ -1,9 +1,8 @@
 package main
 
 import (
-	"metro/metro"
-
 	"github.com/bit101/blg"
+	"github.com/bit101/gometro/metro"
 )
 
 const width = 400.0

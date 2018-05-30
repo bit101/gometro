@@ -25,6 +25,7 @@ var rightMatrix = cairo.Matrix{
 	Y0: 0,
 }
 
+// Box is a box
 type Box struct {
 	X float64
 	Y float64
@@ -61,6 +62,7 @@ func (box *Box) Render(surface *blg.Surface) {
 	box.drawLeftWall(surface)
 	box.drawRightWall(surface)
 	box.drawTop(surface)
+	surface.Restore()
 }
 
 func (box *Box) drawLeftWall(surface *blg.Surface) {
