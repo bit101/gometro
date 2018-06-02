@@ -3,17 +3,19 @@ package textures
 import (
 	"math"
 
-	"github.com/bit101/blg"
-	"github.com/bit101/blg/color"
-	"github.com/bit101/blg/random"
+	"github.com/bit101/blgo"
+	"github.com/bit101/blgo/color"
+	"github.com/bit101/blgo/random"
 )
 
+// Noise is a noise texture.
 type Noise struct {
 	backgroundColor color.Color
 	foregroundColor color.Color
 	density         float64
 }
 
+// NewNoise creates a new Noise texture with given density.
 func NewNoise(density float64) Noise {
 	return Noise{
 		backgroundColor: color.White(),
@@ -22,6 +24,7 @@ func NewNoise(density float64) Noise {
 	}
 }
 
+// NewNoiseWithColors creates a new Noise texture with colors and density
 func NewNoiseWithColors(backgroundColor, foregroundColor color.Color, density float64) Noise {
 	return Noise{
 		backgroundColor: backgroundColor,
@@ -30,7 +33,8 @@ func NewNoiseWithColors(backgroundColor, foregroundColor color.Color, density fl
 	}
 }
 
-func (f Noise) Draw(surface *blg.Surface, x, y, w, h float64) {
+// Draw draws the Noise texture to a surface.
+func (f Noise) Draw(surface *blgo.Surface, x, y, w, h float64) {
 	surface.Save()
 	surface.SetSourceColor(f.backgroundColor)
 	surface.FillRectangle(x, y, w, h)

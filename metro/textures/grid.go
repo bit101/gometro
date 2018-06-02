@@ -1,10 +1,11 @@
 package textures
 
 import (
-	"github.com/bit101/blg"
-	"github.com/bit101/blg/color"
+	"github.com/bit101/blgo"
+	"github.com/bit101/blgo/color"
 )
 
+// Grid is a grid texture.
 type Grid struct {
 	BackgroundColor color.Color
 	ForegroundColor color.Color
@@ -13,6 +14,7 @@ type Grid struct {
 	LineWidth       float64
 }
 
+// NewGrid creates a new Grid texture.
 func NewGrid(cols, rows int) Grid {
 	return Grid{
 		BackgroundColor: color.White(),
@@ -23,6 +25,7 @@ func NewGrid(cols, rows int) Grid {
 	}
 }
 
+// NewGridWithColors creates a new Grid texture with given colors.
 func NewGridWithColors(backgroundColor, foregroundColor color.Color, cols, rows int) Grid {
 	return Grid{
 		BackgroundColor: backgroundColor,
@@ -32,7 +35,8 @@ func NewGridWithColors(backgroundColor, foregroundColor color.Color, cols, rows 
 	}
 }
 
-func (g Grid) Draw(surface *blg.Surface, x, y, w, h float64) {
+// Draw draws the texture.
+func (g Grid) Draw(surface *blgo.Surface, x, y, w, h float64) {
 	surface.Save()
 	// clip
 	surface.Rectangle(x, y, w, h)

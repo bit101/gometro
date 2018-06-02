@@ -3,7 +3,7 @@ package metro
 import (
 	"math"
 
-	"github.com/bit101/blg"
+	"github.com/bit101/blgo"
 	"github.com/bit101/gometro/metro/textures"
 	cairo "github.com/ungerik/go-cairo"
 )
@@ -69,7 +69,7 @@ func (box *Box) Size(w, d, h float64) {
 }
 
 // Render renders the box to a surface
-func (box *Box) Render(surface *blg.Surface) {
+func (box *Box) Render(surface *blgo.Surface) {
 	surface.Save()
 	surface.Translate(box.X, box.Y-box.Z)
 
@@ -80,7 +80,7 @@ func (box *Box) Render(surface *blg.Surface) {
 	surface.Restore()
 }
 
-func (box *Box) drawBack(surface *blg.Surface) {
+func (box *Box) drawBack(surface *blgo.Surface) {
 	// draw a triangle across all face seams to prevent background color leaking through
 	surface.Save()
 	surface.SetSourceRGB(0.5, 0.5, 0.5)
@@ -91,21 +91,21 @@ func (box *Box) drawBack(surface *blg.Surface) {
 	surface.Restore()
 }
 
-func (box *Box) drawLeftWall(surface *blg.Surface) {
+func (box *Box) drawLeftWall(surface *blgo.Surface) {
 	surface.Save()
 	surface.Transform(leftMatrix)
 	box.LeftTexture.Draw(surface, -box.D, -box.H, box.D, box.H)
 	surface.Restore()
 }
 
-func (box *Box) drawRightWall(surface *blg.Surface) {
+func (box *Box) drawRightWall(surface *blgo.Surface) {
 	surface.Save()
 	surface.Transform(rightMatrix)
 	box.RightTexture.Draw(surface, 0, -box.H, box.W, box.H)
 	surface.Restore()
 }
 
-func (box *Box) drawTop(surface *blg.Surface) {
+func (box *Box) drawTop(surface *blgo.Surface) {
 	surface.Save()
 	surface.Translate(0, -box.H)
 	surface.Scale(1, 0.5)
