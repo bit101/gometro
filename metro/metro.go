@@ -3,25 +3,25 @@ package metro
 import (
 	"math"
 
-	"github.com/bit101/blgo"
+	"github.com/bit101/blgg/blgg"
 	"github.com/bit101/gometro/metro/textures"
-	cairo "github.com/ungerik/go-cairo"
+	"github.com/fogleman/gg"
 )
 
-var leftMatrix = cairo.Matrix{
-	Xx: 1,
-	Yx: 0.5,
-	Xy: 0,
-	Yy: 1,
+var leftMatrix = gg.Matrix{
+	XX: 1,
+	YX: 0.5,
+	XY: 0,
+	YY: 1,
 	X0: 0,
 	Y0: 0,
 }
 
-var rightMatrix = cairo.Matrix{
-	Xx: 1,
-	Yx: -0.5,
-	Xy: 0,
-	Yy: 1,
+var rightMatrix = gg.Matrix{
+	XX: 1,
+	YX: -0.5,
+	XY: 0,
+	YY: 1,
 	X0: 0,
 	Y0: 0,
 }
@@ -68,49 +68,49 @@ func (box *Box) Size(w, d, h float64) {
 	box.H = h
 }
 
-// Render renders the box to a surface
-func (box *Box) Render(surface *blgo.Surface) {
-	surface.Save()
-	surface.Translate(box.X, box.Y-box.Z)
+// Render renders the box to a context
+func (box *Box) Render(context *blgg.Context) {
+	context.Push()
+	context.Translate(box.X, box.Y-box.Z)
 
-	box.drawBack(surface)
-	box.drawLeftWall(surface)
-	box.drawRightWall(surface)
-	box.drawTop(surface)
-	surface.Restore()
+	box.drawBack(context)
+	box.drawLeftWall(context)
+	box.drawRightWall(context)
+	box.drawTop(context)
+	context.Pop()
 }
 
-func (box *Box) drawBack(surface *blgo.Surface) {
+func (box *Box) drawBack(context *blgg.Context) {
 	// draw a triangle across all face seams to prevent background color leaking through
-	surface.Save()
-	surface.SetSourceRGB(0.5, 0.5, 0.5)
-	surface.MoveTo(0, 0)
-	surface.LineTo(-box.D, -box.H-box.D/2)
-	surface.LineTo(box.W, -box.H-box.W/2)
-	surface.Fill()
-	surface.Restore()
+	context.Push()
+	context.SetRGB(0.5, 0.5, 0.5)
+	context.MoveTo(0, 0)
+	context.LineTo(-box.D, -box.H-box.D/2)
+	context.LineTo(box.W, -box.H-box.W/2)
+	context.Fill()
+	context.Pop()
 }
 
-func (box *Box) drawLeftWall(surface *blgo.Surface) {
-	surface.Save()
-	surface.Transform(leftMatrix)
-	box.LeftTexture.Draw(surface, -box.D, -box.H, box.D, box.H)
-	surface.Restore()
+func (box *Box) drawLeftWall(context *blgg.Context) {
+	context.Push()
+	context.Shear(leftMatrix.XY, leftMatrix.YX)
+	box.LeftTexture.Draw(context, -box.D, -box.H, box.D, box.H)
+	context.Pop()
 }
 
-func (box *Box) drawRightWall(surface *blgo.Surface) {
-	surface.Save()
-	surface.Transform(rightMatrix)
-	box.RightTexture.Draw(surface, 0, -box.H, box.W, box.H)
-	surface.Restore()
+func (box *Box) drawRightWall(context *blgg.Context) {
+	context.Push()
+	context.Shear(rightMatrix.XY, rightMatrix.YX)
+	box.RightTexture.Draw(context, 0, -box.H, box.W, box.H)
+	context.Pop()
 }
 
-func (box *Box) drawTop(surface *blgo.Surface) {
-	surface.Save()
-	surface.Translate(0, -box.H)
-	surface.Scale(1, 0.5)
-	surface.Scale(math.Sqrt2, math.Sqrt2)
-	surface.Rotate(math.Pi / 4)
-	box.TopTexture.Draw(surface, -box.D, -box.W, box.D, box.W)
-	surface.Restore()
+func (box *Box) drawTop(context *blgg.Context) {
+	context.Push()
+	context.Translate(0, -box.H)
+	context.Scale(1, 0.5)
+	context.Scale(math.Sqrt2, math.Sqrt2)
+	context.Rotate(math.Pi / 4)
+	box.TopTexture.Draw(context, -box.D, -box.W, box.D, box.W)
+	context.Pop()
 }

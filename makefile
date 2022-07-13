@@ -4,5 +4,4 @@ default:
 build:
 	@go build main.go
 	@./main
-	@img_view out.png
 

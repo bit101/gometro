@@ -1,14 +1,14 @@
 package textures
 
 import (
-	"github.com/bit101/blgo"
-	"github.com/bit101/blgo/color"
+	"github.com/bit101/blgg/blcolor"
+	"github.com/bit101/blgg/blgg"
 )
 
 // Grid is a grid texture.
 type Grid struct {
-	BackgroundColor color.Color
-	ForegroundColor color.Color
+	BackgroundColor blcolor.Color
+	ForegroundColor blcolor.Color
 	Rows            int
 	Cols            int
 	LineWidth       float64
@@ -17,8 +17,8 @@ type Grid struct {
 // NewGrid creates a new Grid texture.
 func NewGrid(cols, rows int) Grid {
 	return Grid{
-		BackgroundColor: color.White(),
-		ForegroundColor: color.Black(),
+		BackgroundColor: blcolor.White(),
+		ForegroundColor: blcolor.Black(),
 		Rows:            rows,
 		Cols:            cols,
 		LineWidth:       0.5,
@@ -26,7 +26,7 @@ func NewGrid(cols, rows int) Grid {
 }
 
 // NewGridWithColors creates a new Grid texture with given colors.
-func NewGridWithColors(backgroundColor, foregroundColor color.Color, cols, rows int) Grid {
+func NewGridWithColors(backgroundColor, foregroundColor blcolor.Color, cols, rows int) Grid {
 	return Grid{
 		BackgroundColor: backgroundColor,
 		ForegroundColor: foregroundColor,
@@ -36,31 +36,32 @@ func NewGridWithColors(backgroundColor, foregroundColor color.Color, cols, rows 
 }
 
 // Draw draws the texture.
-func (g Grid) Draw(surface *blgo.Surface, x, y, w, h float64) {
-	surface.Save()
+func (g Grid) Draw(context *blgg.Context, x, y, w, h float64) {
+	context.Push()
 	// clip
-	surface.Rectangle(x, y, w, h)
-	surface.Clip()
+	context.DrawRectangle(x, y, w, h)
+	context.Clip()
 	// background
-	surface.SetSourceColor(g.BackgroundColor)
-	surface.FillRectangle(x, y, w, h)
+	context.SetColor(g.BackgroundColor)
+	context.FillRectangle(x, y, w, h)
 	// grid properties
-	surface.SetSourceColor(g.ForegroundColor)
-	surface.SetLineWidth(g.LineWidth)
+	context.SetColor(g.ForegroundColor)
+	context.SetLineWidth(g.LineWidth)
 	// horiz lines
 	hh := (h - g.LineWidth)
 	for i := 0; i <= g.Rows; i++ {
 		yy := y + g.LineWidth/2 + float64(i)/float64(g.Rows)*hh
-		surface.MoveTo(x, yy)
-		surface.LineTo(x+w, yy)
+		context.MoveTo(x, yy)
+		context.LineTo(x+w, yy)
 	}
 	// vert lines
 	ww := (w - g.LineWidth)
 	for i := 0; i <= g.Cols; i++ {
 		xx := x + g.LineWidth/2 + float64(i)/float64(g.Cols)*ww
-		surface.MoveTo(xx, y)
-		surface.LineTo(xx, y+h)
+		context.MoveTo(xx, y)
+		context.LineTo(xx, y+h)
 	}
-	surface.Stroke()
-	surface.Restore()
+	context.Stroke()
+	context.ResetClip()
+	context.Pop()
 }
